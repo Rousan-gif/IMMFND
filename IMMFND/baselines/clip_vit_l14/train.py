@@ -1,0 +1,201 @@
+import os
+import pandas as pd
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+from transformers import AutoProcessor, CLIPModel, TrainingArguments, Trainer
+from PIL import Image
+import numpy as np
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, classification_report
+from tqdm import tqdm
+import warnings
+warnings.filterwarnings("ignore")
+
+# -----------------------------
+# CONFIGURATION
+# -----------------------------
+BASE_PATH = "/scratch/sg/Rousan/Finla_Dataset_20_10_Text_only_correct"
+BATCH_SIZE = 16
+LEARNING_RATE = 2e-5
+NUM_EPOCHS = 3
+MAX_TEXT_LENGTH = 77
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {DEVICE}")
+
+
+# -----------------------------
+# HELPER FUNCTION: LOAD EXCEL FILES
+# -----------------------------
+def load_dataset(split):
+    """
+    Load all Excel files from the given split (train/validation/test)
+    Returns a DataFrame with columns: Sr. No, claim, title, content, label, image_path
+    """
+    data = []
+    split_path = os.path.join(BASE_PATH, split)
+    
+    for label_name, image_folder in [("fake", "Fake_image"), ("real", "Real_image")]:
+        xl_folder = os.path.join(split_path, label_name.capitalize())  # Fake/Real subfolder
+        image_dir = os.path.join(xl_folder, image_folder)  # e.g., Fake_image
+        
+        for xl_file in os.listdir(xl_folder):
+            if xl_file.endswith(".xlsx"):
+                df = pd.read_excel(os.path.join(xl_folder, xl_file))
+                for idx, row in df.iterrows():
+                    sr_no = str(row["Sr. No"])
+                    image_name = sr_no + ".jpg"  # match Sr. No with image
+                    image_path = os.path.join(image_dir, image_name)
+                    
+                    data.append({
+                        "sr_no": sr_no,
+                        "claim": row.get("claim", ""),
+                        "label": label_name,
+                        "image_path": image_path
+                    })
+    return pd.DataFrame(data)
+
+# Load datasets
+train_df = load_dataset("train")
+val_df   = load_dataset("validation")
+test_df  = load_dataset("test")
+
+print(f"Train: {len(train_df)} | Validation: {len(val_df)} | Test: {len(test_df)}")
+
+# -----------------------------
+# LOAD CLIP MODEL & PROCESSOR
+# -----------------------------
+processor = AutoProcessor.from_pretrained("openai/clip-vit-large-patch14")
+clip_model = CLIPModel.from_pretrained("openai/clip-vit-large-patch14").to(DEVICE)
+
+# -----------------------------
+# CUSTOM DATASET
+# -----------------------------
+class FakeNewsDataset(Dataset):
+    def __init__(self, df, processor, max_length=MAX_TEXT_LENGTH):
+        self.df = df.reset_index(drop=True)
+        self.processor = processor
+        self.max_length = max_length
+        self.label_to_id = {"fake": 0, "real": 1}
+        
+    def __len__(self):
+        return len(self.df)
+    
+    def __getitem__(self, idx):
+        row = self.df.iloc[idx]
+        
+        # Load image
+        try:
+            image = Image.open(row["image_path"]).convert("RGB")
+        except:
+            image = Image.new("RGB", (224,224), "white")
+        
+        # Prepare text
+        text_parts = [str(row.get("claim",""))]
+        text = text_parts
+        
+        # Process
+        inputs = self.processor(text=text, images=image, return_tensors="pt", padding="max_length", truncation=True, max_length=self.max_length)
+        for k in inputs.keys():
+            inputs[k] = inputs[k].squeeze(0)
+        inputs["labels"] = torch.tensor(self.label_to_id[row["label"]], dtype=torch.long)
+        return inputs
+
+# Create datasets
+train_dataset = FakeNewsDataset(train_df, processor)
+val_dataset   = FakeNewsDataset(val_df, processor)
+test_dataset  = FakeNewsDataset(test_df, processor)
+print(" Datasets ready!")
+
+# -----------------------------
+# CUSTOM MODEL
+# -----------------------------
+class CLIPForFakeNews(nn.Module):
+    def __init__(self, clip_model):
+        super().__init__()
+        self.clip = clip_model
+        self.dropout = nn.Dropout(0.1)
+        # classifier will be initialized later after computing combined dim
+        self.classifier = None
+
+    def forward(self, input_ids=None, attention_mask=None, pixel_values=None, labels=None):
+        # get embeddings
+        text_features  = self.clip.get_text_features(input_ids=input_ids, attention_mask=attention_mask)
+        image_features = self.clip.get_image_features(pixel_values=pixel_values)
+        combined = torch.cat([text_features, image_features], dim=1)
+        combined = self.dropout(combined)
+        logits = self.classifier(combined)
+        
+        loss = None
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits, labels)
+        return {"loss": loss, "logits": logits}
+
+# Initialize model
+custom_model = CLIPForFakeNews(clip_model).to(DEVICE)
+
+# -----------------------------
+# Compute combined dim dynamically
+# -----------------------------
+dummy = next(iter(DataLoader(train_dataset, batch_size=1)))
+dummy = {k: v.to(DEVICE) for k,v in dummy.items()}
+text_feat  = clip_model.get_text_features(input_ids=dummy["input_ids"], attention_mask=dummy["attention_mask"])
+image_feat = clip_model.get_image_features(pixel_values=dummy["pixel_values"])
+combined_dim = text_feat.shape[1] + image_feat.shape[1]
+custom_model.classifier = nn.Linear(combined_dim, 2).to(DEVICE)
+print(f" Classifier input dim: {combined_dim}")
+
+
+# -----------------------------
+# METRICS FUNCTION
+# -----------------------------
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    preds = np.argmax(logits, axis=1)
+    accuracy = accuracy_score(labels, preds)
+    precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average="weighted")
+    return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
+
+
+# -----------------------------
+# TRAINING ARGUMENTS
+# -----------------------------
+training_args = TrainingArguments(
+    output_dir="./clip_fake_news_results",
+    num_train_epochs=NUM_EPOCHS,
+    per_device_train_batch_size=BATCH_SIZE,
+    per_device_eval_batch_size=BATCH_SIZE,
+    learning_rate=LEARNING_RATE,
+    weight_decay=0.01,
+    logging_dir="./logs",
+    logging_steps=500,
+    save_total_limit=2,
+    report_to="none",
+    remove_unused_columns=False
+)
+
+# -----------------------------
+# CUSTOM TRAINER
+# -----------------------------
+class CustomTrainer(Trainer):
+    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
+        labels = inputs.pop("labels")
+        outputs = model(**inputs, labels=labels)
+        loss = outputs["loss"]
+        return (loss, outputs) if return_outputs else loss
+
+trainer = CustomTrainer(
+    model=custom_model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    compute_metrics=compute_metrics
+)
+
+
+# -----------------------------
+# TRAINING
+# -----------------------------
+print("🚀 Starting training...")
+trainer.train()
+print("✅ Training completed!")
