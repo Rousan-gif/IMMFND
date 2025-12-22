@@ -116,8 +116,6 @@ Create a virtual environment and install dependencies:
 pip install -r requirements.txt
 ```
 
-> **Note:** Multilingual support requires **XeLaTeX or LuaLaTeX** for proper font rendering.
-
 ---
 
 ##  Reproducibility
@@ -135,7 +133,7 @@ If you use this dataset or code, please cite our paper:
 ```bibtex
 @inproceedings{immfnd2026,
   title     = {IMMFND: An Indian Multilingual Multimodal Fake News Dataset with Factual Claim and Evidence Generation},
-  author    = {Rousanuzzaman and Amrutha, Kankanala Siva Sai and Ghosh, Shreya},
+  author    = {Rousanuzzaman, Amrutha Kankanala Siva Sai and Ghosh Shreya},
   booktitle = {Proceedings of the International Conference on Pattern Recognition (ICPR)},
   year      = {2026}
 }
