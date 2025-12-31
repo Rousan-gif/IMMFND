@@ -73,7 +73,7 @@ def evaluate(dataset):
 
     label_map = ["fake", "real"]
 
-    print("\n📊 Test Classification Report:\n")
+    print("\n Test Classification Report:\n")
     print(classification_report(
         [label_map[l] for l in all_labels],
         [label_map[p] for p in all_preds],
@@ -82,3 +82,4 @@ def evaluate(dataset):
 
 
 evaluate(test_dataset)
+
