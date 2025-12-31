@@ -224,11 +224,12 @@ trainer = CustomTrainer(
 # -----------------------------
 # TRAIN
 # -----------------------------
-print("\n🚀 Training CLIP-ViT-L/14 Fake News Model...\n")
+print("\n Training CLIP-ViT-L/14 Fake News Model...\n")
 trainer.train()
 
-print("\n✅ Training complete. Saving model...\n")
+print("\n Training complete. Saving model...\n")
 trainer.save_model("./clip_vit_l14_trained")
 processor.save_pretrained("./clip_vit_l14_trained")
 
-print("📁 Saved to: ./clip_vit_l14_trained")
+print(" Saved to: ./clip_vit_l14_trained")
+
