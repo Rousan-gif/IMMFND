@@ -47,6 +47,8 @@ SerpApi Key (for Google Search results)
 
 pip install -r requirements.txt
 
+```
+
 Create a .env file in the root directory. Add your API keys
 
 **Option A**: Using Default Names
@@ -54,16 +56,20 @@ If your file is named input_claims.xlsx and is in the same folder as the script,
 
 ```bash
 python main.py
+```
 
 **Option B**: Using Custom Names/Paths
 If your file is named differently or located in a subfolder, use the --input and --output flags:
 
 ```bash
 python main.py --input data/my_experiment_data.xlsx --output data/results.xlsx
+```
 
 To calculate performance metrics, run:
 ```bash
 python evaluate.py --file data/results.xlsx
+```
+
 
 
 
