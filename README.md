@@ -55,9 +55,9 @@ IMMFND/
 │   └── scrape_ifcn_sources.py
 │
 ├── factcheck_mm/
-│   ├── retrieval.py
-│   ├── verification.py
-│   └── pipeline.py
+│   ├── core_pipeline.py
+│   ├── main.py
+│   └── evaluate.py
 │
 ├── baselines/
 │   └── clip_vit_l14/
