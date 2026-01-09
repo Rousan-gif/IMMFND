@@ -1,0 +1,13 @@
+pandas
+torch
+numpy
+openpyxl
+sentence-transformers
+openai
+requests
+beautifulsoup4
+trafilatura
+google-search-results
+urllib3
+python-dotenv
+scikit-learn
