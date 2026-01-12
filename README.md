@@ -2,7 +2,7 @@
 
 **with Factual Claim and Evidence Generation**
 
-This repository provides the official implementation and resources for **IMMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheck-MM**, a hybrid multimodal verification framework for factual claim verification, claim correction using evidences and explanation generation.
+This repository provides the official implementation and resources for **IMMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheck-MM**, a hybrid multimodal verification framework for factual claim generation using evidences and explanation generation.
 
 The project targets real-world misinformation in the Indian context, covering **13 Indian languages** and combining **textual and visual modalities**.
 
