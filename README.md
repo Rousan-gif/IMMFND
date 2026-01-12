@@ -2,7 +2,7 @@
 
 **with Factual Claim and Evidence Generation**
 
-This repository provides the official implementation and resources for **IMMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheck-MM**, a hybrid multimodal verification framework for factual claim verification and evidence generation.
+This repository provides the official implementation and resources for **IMMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheck-MM**, a hybrid multimodal verification framework for factual claim verification, claim correction using evidences and explanation generation.
 
 The project targets real-world misinformation in the Indian context, covering **13 Indian languages** and combining **textual and visual modalities**.
 
@@ -133,7 +133,7 @@ If you use this dataset or code, please cite our paper:
 ```bibtex
 @inproceedings{immfnd2026,
   title     = {IMMFND: An Indian Multilingual Multimodal Fake News Dataset with Factual Claim and Evidence Generation},
-  author    = {Rousanuzzaman, Amrutha Kankanala Siva Sai and Ghosh Shreya},
+  author    = {Rousanuzzaman, Kankanala Siva Sai Amrutha and Shreya Ghosh},
   booktitle = {Proceedings of the International Conference on Pattern Recognition (ICPR)},
   year      = {2026}
 }
@@ -153,7 +153,7 @@ See the `LICENSE` file for details.
 For questions or collaborations:
 
 * **Rousanuzzaman** – [a24cs09008@iitbbs.ac.in](mailto:a24cs09008@iitbbs.ac.in)
-* **Amrutha Kankanala Siva Sai** – [21cs02005@iitbbs.ac.in](mailto:21cs02005@iitbbs.ac.in)
+* **Kankanala Siva Sai Amrutha** – [21cs02005@iitbbs.ac.in](mailto:21cs02005@iitbbs.ac.in)
 * **Shreya Ghosh** – [shreya@iitbbs.ac.in](mailto:shreya@iitbbs.ac.in)
 
 
