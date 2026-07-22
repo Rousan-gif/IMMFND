@@ -15,7 +15,6 @@ The project targets real-world misinformation in the Indian context, covering **
 * **FactCheckMM Framework**:
   A hybrid multimodal verification pipeline combining:
 
-  * Local semantic vector cache
   * Live web multimodal retrieval
   * Cross-lingual semantic alignment
   * Structured reasoning with large language models
