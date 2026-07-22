@@ -1,8 +1,8 @@
- ## IMMFND: Indian Multilingual Multimodal Fake News Dataset
+ ## Indic_MMFND: A Multilingual and Multimodal Benchmark for Evidence Grounded Fake News Verification and Correction
 
 **with Factual Claim and Evidence Generation**
 
-This repository provides the official implementation and resources for **IMMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheck-MM**, a hybrid multimodal verification framework for factual claim generation using evidences and explanation generation.
+This repository provides the official implementation and resources for **Indic_MMFND**, a large-scale **Indian Multilingual and Multimodal Fake News Dataset**, along with **FactCheckMM**, a hybrid multimodal verification framework for factual claim generation using evidences and explanation generation.
 
 The project targets real-world misinformation in the Indian context, covering **13 Indian languages** and combining **textual and visual modalities**.
 
@@ -10,9 +10,9 @@ The project targets real-world misinformation in the Indian context, covering **
 
 ## Key Contributions
 
-* **IMMFND Dataset**:
+* **Indic_MMFND Dataset**:
   A large-scale dataset with **86,610** fact-checked news samples across **13 Indian languages**, each containing text, image, metadata, and veracity labels.
-* **FactCheck-MM Framework**:
+* **FactCheckMM Framework**:
   A hybrid multimodal verification pipeline combining:
 
   * Local semantic vector cache
@@ -77,7 +77,7 @@ IMMFND/
 
 ##  Dataset Access
 
-Due to size constraints, the **demo version of IMMFND** is hosted externally.
+Due to size constraints, the **demo version of Indic_MMFND** is hosted externally.
 
 * **Demo Dataset (Google Drive)**:
   [https://drive.google.com/file/d/1eqg36sMyrG0XBIRGWkg7YecbB1CSILLO/view](https://drive.google.com/file/d/1eqg36sMyrG0XBIRGWkg7YecbB1CSILLO/view)
@@ -86,21 +86,19 @@ The **full dataset** will be made publicly available **after paper acceptance**,
 
 ---
 
-##  FactCheck-MM Overview
+##  FactCheckMM Overview
 
-**FactCheck-MM** is designed for **live web verification** of multilingual and multimodal claims.
-It operates in two stages:
+**FactCheckMM** is designed for **live web verification** of multilingual and multimodal claims.
+It operates in one stages:
 
-1. **Local Semantic Cache Retrieval**
-   Quickly identifies previously verified claims using dense text–image embeddings.
-2. **Web Multimodal Retrieval & Reasoning**
+1. **Web Multimodal Retrieval & Reasoning**
    For unseen claims, the system retrieves external textual and visual evidence and synthesizes multilingual explanations through structured reasoning.
 
 ---
 
 ##  Baseline: CLIP-ViT-L/14
 
-We provide training and evaluation scripts for **CLIP-ViT-L/14**, used as a strong multimodal baseline for comparison with FactCheck-MM.
+We provide training and evaluation scripts for **CLIP-ViT-L/14**, used as a strong multimodal baseline for comparison with FactCheckMM.
 
 * Image + Text (Claim) encoding
 * End-to-end supervised training
@@ -131,10 +129,10 @@ pip install -r requirements.txt
 If you use this dataset or code, please cite our paper:
 
 ```bibtex
-@inproceedings{immfnd2026,
-  title     = {IMMFND: An Indian Multilingual Multimodal Fake News Dataset with Factual Claim and Evidence Generation},
+@inproceedings{indic_mmfnd2026,
+  title     = {Indic_MMFND: A Multilingual and Multimodal Benchmark for Evidence Grounded Fake News Verification and Correction},
   author    = {Rousanuzzaman, Kankanala Siva Sai Amrutha and Shreya Ghosh},
-  booktitle = {Proceedings of the International Conference on Pattern Recognition (ICPR)},
+  journal   = {Transactions on Asian and Low-Resource Language Information Processing (TALLIP)},
   year      = {2026}
 }
 ```
