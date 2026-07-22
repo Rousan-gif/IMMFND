@@ -77,7 +77,7 @@ This multilingual coverage enables robust research on **cross-lingual misinforma
 ```
 dataset_collection/
 │
-├── Datacollection.py    # Collects fake news from fact-checking sites
+├── Data_collection.py    # Collects fake news from fact-checking sites
 └── README.md
 ```
 
