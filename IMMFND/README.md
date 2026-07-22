@@ -1,7 +1,7 @@
 
-# **IMMFND**
+# **Indic_MMFND**
 
-**IMMFND (Indian Multilingual Multimodal Fake News Dataset)** is a large-scale benchmark for fake news detection in the Indian information ecosystem.
+**Indic_MMFND (Indian Multilingual Multimodal Fake News Dataset)** is a large-scale benchmark for fake news detection in the Indian information ecosystem.
 It is accompanied by **FactCheck-MM**, a hybrid multimodal verification framework designed for **factual claim validation and evidence generation** across multiple Indian languages.
 
 ---
