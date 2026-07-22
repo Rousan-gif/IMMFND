@@ -77,13 +77,7 @@ This multilingual coverage enables robust research on **cross-lingual misinforma
 ```
 dataset_collection/
 │
-├── scrape_factcheck.py    # Collects fake news from fact-checking sites
-├── scrape_realnews.py     # Collects real news from media outlets
-├── parse_articles.py      # Extracts claims, text, images, metadata
-├── clean_images.py        # Removes watermarks, logos, and bias cues
-├── deduplicate.py         # Removes duplicate or near-duplicate samples
-├── language_detect.py     # Language identification and validation
-├── save_dataset.py        # Stores data in structured format (CSV/JSON)
+├── Datacollection.py    # Collects fake news from fact-checking sites
 └── README.md
 ```
 
