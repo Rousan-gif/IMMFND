@@ -2,9 +2,9 @@
 
 # Dataset Collection
 
-**IMMFND: Indian Multilingual Multimodal Fake News Dataset**
+**Indic_MMFND: Indian Multilingual Multimodal Fake News Dataset**
 
-This directory contains the **data collection and preprocessing pipeline** used to construct the **IMMFND** dataset. The scripts automatically collect **fact-checked fake news** and **verified real news** from reliable Indian sources, covering multiple languages and modalities.
+This directory contains the **data collection and preprocessing pipeline** used to construct the **Indic_MMFND** dataset. The scripts automatically collect **fact-checked fake news** and **verified real news** from reliable Indian sources, covering multiple languages and modalities.
 
 ---
 
